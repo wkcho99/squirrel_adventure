@@ -8,6 +8,7 @@ public class EnemyMove : MonoBehaviour
     public int nextMove;
     SpriteRenderer spriteRenderer;
     Animator anim;
+    Health health;
 
     CapsuleCollider2D capsuleCollider;
     // Start is called before the first frame update
@@ -16,6 +17,7 @@ public class EnemyMove : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
         capsuleCollider = GetComponent<CapsuleCollider2D>();
+        health = GetComponent<Health>();
         Invoke("Think", 2);
     }
 

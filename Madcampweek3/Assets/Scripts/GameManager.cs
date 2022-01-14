@@ -7,10 +7,10 @@ public class GameManager : MonoBehaviour
     public int totalPoint;
     public int stagePoint;
     public int stageIndex;
-    public int health;
 
     public PlayerMove player;
     public GameObject[] Stages;
+    //private Health health = player.GetComponent<Health>();
     
     public void NextStage()
     {
@@ -32,25 +32,11 @@ public class GameManager : MonoBehaviour
         totalPoint += stagePoint;
         stagePoint = 0;
     }
-    public void HealthDown(int changehealth){
-        health = changehealth;
-        if(health > 1)
-            health--;
-        else{
-            //Player Die Effect
-            player.OnDie();
-
-            //ResultUI
-            Debug.Log("죽었습니다");
-            //Retry Button
-
-        }
-    }
 
     void OnTriggerEnter2D(Collider2D collision) {
         if(collision.gameObject.tag == "Player"){
             //Health Down
-            HealthDown(1);
+            //health.TakeDamage(1);
             //Player Reposition
             PlayerReposition();
         }
