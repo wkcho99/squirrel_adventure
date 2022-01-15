@@ -10,34 +10,27 @@ public class PlayerMove : MonoBehaviour
     Rigidbody2D rigid;
     SpriteRenderer spriteRenderer;
     Animator anim;
-    CapsuleCollider2D capsuleCollider;
-    Health health;
+    BoxCollider2D boxCollider;
+    public Health health;
     [SerializeField] private LayerMask groundLayer;
     private float wallJumpCooldown;
+    private float horizontalInput;
     void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
-        capsuleCollider = GetComponent<CapsuleCollider2D>();
+        boxCollider = GetComponent<BoxCollider2D>();
         health = GetComponent<Health>();
     }
 
     private void Update() {
-        //Jump
-        if(wallJumpCooldown > 0.2f) {
-            /*if(onWall() && !isGrounded()) {
-                rigid.gravityScale = 0;
-                VelocityZero();
-            } else {
-                rigid.gravityScale = 4;
-            }*/
+        horizontalInput = Input.GetAxis("Horizontal");
 
-            if(Input.GetButtonDown("Jump"))
+        //Jump
+        if(Input.GetButtonDown("Jump"))
                 Jump();
-        }
-        else
-            wallJumpCooldown += Time.deltaTime;
+        wallJumpCooldown += Time.deltaTime;
 
         //Stop speed when no input
          if(Input.GetButtonUp("Horizontal")){
@@ -45,9 +38,10 @@ public class PlayerMove : MonoBehaviour
          }
 
         //Direction change
-        if(Input.GetButton("Horizontal")){
-            spriteRenderer.flipX = Input.GetAxisRaw("Horizontal") == 1;
-        }
+        if(horizontalInput > 0.01f)
+            transform.localScale = Vector3.one;
+        else if(horizontalInput < -0.01f)
+            transform.localScale = new Vector3(-1, 1, 1);
 
         //walk animation setting
         if(Mathf.Abs(rigid.velocity.x)< 0.3)
@@ -62,21 +56,20 @@ public class PlayerMove : MonoBehaviour
             rigid.AddForce(Vector2.up * jumPower, ForceMode2D.Impulse);
             anim.SetBool("isJumping", true);
         }
-        else if(onWall() && !isGrounded()) {
+        else if(onWall() && !isGrounded() && wallJumpCooldown > 2.0f) {
             wallJumpCooldown = 0;
             rigid.velocity = new Vector2(-Mathf.Sign(transform.localScale.x)*20, 20);
             transform.localScale = new Vector3(-Mathf.Sign(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+            anim.SetBool("isJumping", true);
         }
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        if(wallJumpCooldown > 0.2f) {
-            //Move by Control
-            float h = Input.GetAxisRaw("Horizontal");
-            rigid.AddForce(Vector2.right * h * 4, ForceMode2D.Impulse);
-        }
+        //Move by Control
+        float h = Input.GetAxisRaw("Horizontal");
+        rigid.AddForce(Vector2.right * h * 4, ForceMode2D.Impulse);
 
         //Maxspeed control
         if (rigid.velocity.x > maxSpeed)
@@ -131,6 +124,10 @@ public class PlayerMove : MonoBehaviour
     }
 
     void OnDamaged(Vector2 targetPos){
+        if(health.currentHealth == 0) {
+            gameObject.SetActive(false);
+            return;
+        }
         //Change Layer
         gameObject.layer = 11;
         //View Alpha 피격시
@@ -155,6 +152,7 @@ public class PlayerMove : MonoBehaviour
 
         //Enemy die
         EnemyMove enemyMove = enemy.GetComponent<EnemyMove>();
+        enemyMove.health.TakeDamage(100);
         enemyMove.OnDamaged();
     }
 
@@ -163,12 +161,16 @@ public class PlayerMove : MonoBehaviour
     }
 
     private bool isGrounded() {
-        RaycastHit2D raycastHit = Physics2D.BoxCast(capsuleCollider.bounds.center, capsuleCollider.bounds.size, 0, Vector2.down, 0.1f, groundLayer);
+        RaycastHit2D raycastHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0, Vector2.down, 0.1f, groundLayer);
         return raycastHit.collider != null;
     }
 
     private bool onWall() {
-        RaycastHit2D raycastHit = Physics2D.BoxCast(capsuleCollider.bounds.center, capsuleCollider.bounds.size, 0, new Vector2(transform.localScale.x, 0), 0.1f, groundLayer);
+        RaycastHit2D raycastHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0, new Vector2(transform.localScale.x, 0), 0.3f, groundLayer);
         return raycastHit.collider != null;
+    }
+
+    public bool canAttack() {
+        return horizontalInput == 0 && isGrounded() && !onWall();
     }
 }

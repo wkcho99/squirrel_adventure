@@ -10,7 +10,6 @@ public class GameManager : MonoBehaviour
 
     public PlayerMove player;
     public GameObject[] Stages;
-    //private Health health = player.GetComponent<Health>();
     
     public void NextStage()
     {
@@ -35,8 +34,6 @@ public class GameManager : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision) {
         if(collision.gameObject.tag == "Player"){
-            //Health Down
-            //health.TakeDamage(1);
             //Player Reposition
             PlayerReposition();
         }
