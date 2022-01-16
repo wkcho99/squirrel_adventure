@@ -2,8 +2,9 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
-    [SerializeField] private float startingHealth;
+    [SerializeField] public float startingHealth;
     public float currentHealth { get; private set; }
+    public bool hurt;
     private bool dead;
     private Animator anim;
 
@@ -17,6 +18,7 @@ public class Health : MonoBehaviour
 
         if(currentHealth > 0) {
             anim.SetTrigger("hurt");
+            hurt = true;
         }
         else {
             if(!dead) {
