@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     public int stagePoint;
     public int stageIndex;
     public int cnt_dotory;
+    public int skill;
 
     public PlayerMove player;
     public GameObject[] Stages;

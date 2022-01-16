@@ -17,6 +17,10 @@ public class PlayerMove : MonoBehaviour
     private float horizontalInput;
     private int cnt_hurt_frame;
     private bool isGliding;
+    public int skill;
+    [SerializeField] private GameObject fire_skilled;
+    [SerializeField] private GameObject thunder_skilled;
+    [SerializeField] private GameObject rock_skilled;
     void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
@@ -27,6 +31,12 @@ public class PlayerMove : MonoBehaviour
         gameManager.cnt_dotory = 0;
         cnt_hurt_frame = 0;
         isGliding = false;
+        System.Random rand = new System.Random();
+        gameManager.skill = rand.Next(3);
+        skill = gameManager.skill;
+        if(skill == 0) fire_skilled.SetActive(true);
+        else if(skill == 1) thunder_skilled.SetActive(true);
+        else if(skill == 2) rock_skilled.SetActive(true);
     }
 
     private void Update() {

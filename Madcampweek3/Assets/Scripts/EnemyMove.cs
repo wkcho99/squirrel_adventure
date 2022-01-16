@@ -18,11 +18,11 @@ public class EnemyMove : MonoBehaviour
         anim = GetComponent<Animator>();
         capsuleCollider = GetComponent<CapsuleCollider2D>();
         health = GetComponent<Health>();
-        Invoke("Think", 2);
+        //Invoke("Think", 2);
     }
 
     // Update is called once per frame
-    void FixedUpdate() {
+    /*void FixedUpdate() {
         //Move
         rigid.velocity =  new Vector2(nextMove, rigid.velocity.y);
 
@@ -37,9 +37,9 @@ public class EnemyMove : MonoBehaviour
                 Invoke("Think", 2);
             }
         }
-    }
+    }*/
 
-    void Think(){
+    /*void Think(){
         //랜덤에서 최댓값은 랜덤에 포함이 안됨
         nextMove = Random.Range(-1, 2);
 
@@ -54,7 +54,7 @@ public class EnemyMove : MonoBehaviour
             spriteRenderer.flipX = (nextMove == 1);
 
         anim.SetInteger("WalkSpeed", nextMove);
-    }
+    }*/
 
     public void OnDamaged(){
         if(health.currentHealth == 0) {
