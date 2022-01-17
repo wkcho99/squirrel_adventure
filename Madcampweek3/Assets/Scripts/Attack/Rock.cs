@@ -7,9 +7,12 @@ public class Rock : MonoBehaviour
 
     private BoxCollider2D boxCollider;
 
+    Rigidbody2D rigid;
+
     private void Awake()
     {
         boxCollider = GetComponent<BoxCollider2D>();
+        rigid = GetComponent<Rigidbody2D>();
         canDamage = true;
     }
     private void Update()
@@ -38,6 +41,12 @@ public class Rock : MonoBehaviour
         lifetime = 0;
         gameObject.SetActive(true);
         boxCollider.enabled = true;
+        Invoke("RockTrigger", 0.2f);
+    }
+
+    private void RockTrigger()
+    {
+        boxCollider.isTrigger =  false;
     }
     private void Deactivate()
     {

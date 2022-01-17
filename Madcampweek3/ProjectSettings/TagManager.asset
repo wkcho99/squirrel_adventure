@@ -8,6 +8,7 @@ TagManager:
   - Enemy
   - Spike
   - Item
+  - Fake
   layers:
   - Default
   - TransparentFX
@@ -23,7 +24,7 @@ TagManager:
   - PlayerDamaged
   - Spike
   - Fireball
-  - 
+  - Fake
   - 
   - 
   - 

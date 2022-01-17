@@ -10,7 +10,7 @@ public class PlayerMove : MonoBehaviour
     Rigidbody2D rigid;
     SpriteRenderer spriteRenderer;
     Animator anim;
-    BoxCollider2D boxCollider;
+    CapsuleCollider2D capsuleCollider;
     public Health health;
     [SerializeField] private LayerMask groundLayer;
     private float wallJumpCooldown;
@@ -26,7 +26,7 @@ public class PlayerMove : MonoBehaviour
         rigid = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
-        boxCollider = GetComponent<BoxCollider2D>();
+        capsuleCollider = GetComponent<CapsuleCollider2D>();
         health = GetComponent<Health>();
         gameManager.cnt_dotory = 0;
         cnt_hurt_frame = 0;
@@ -34,6 +34,7 @@ public class PlayerMove : MonoBehaviour
         System.Random rand = new System.Random();
         gameManager.skill = rand.Next(3);
         skill = gameManager.skill;
+        skill = 2;
         if(skill == 0) fire_skilled.SetActive(true);
         else if(skill == 1) thunder_skilled.SetActive(true);
         else if(skill == 2) rock_skilled.SetActive(true);
@@ -162,10 +163,12 @@ public class PlayerMove : MonoBehaviour
             health.TakeDamage(1);
             OnDamaged(collision.transform.position);
         }
+
     }
 
     void OnTriggerEnter2D(Collider2D collision) {
         if(collision.gameObject.tag == "Item"){
+            Debug.Log("Item!!!!!!!!!!!!!!!!");
             gameManager.cnt_dotory++;
             //Point Earn
             bool isBronze =  collision.gameObject.name.Contains("Bronze");
@@ -183,6 +186,14 @@ public class PlayerMove : MonoBehaviour
         if(collision.gameObject.tag == "Finish" && gameManager.cnt_dotory == 3){
             //Finish -> to Next Stage
             gameManager.NextStage();
+        }
+        if(collision.gameObject.tag == "Fake"){
+            Debug.Log("Fake!!!!!!!!!!!!!!!!");
+            if(rigid.velocity.y > 0 && transform.position.y < collision.transform.position.y){
+                Debug.Log("Hit!!!!!!!!!!!!!!!!!!!!");
+                collision.GetComponent<BoxCollider2D>().isTrigger = false;
+                collision.GetComponent<SpriteRenderer>().color = new Color(1,1,1,1);
+            }
         }
     }
 
@@ -221,12 +232,12 @@ public class PlayerMove : MonoBehaviour
     }
 
     private bool isGrounded() {
-        RaycastHit2D raycastHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0, Vector2.down, 0.1f, groundLayer);
+        RaycastHit2D raycastHit = Physics2D.BoxCast(capsuleCollider.bounds.center, capsuleCollider.bounds.size, 0, Vector2.down, 0.1f, groundLayer);
         return raycastHit.collider != null;
     }
 
     private bool onWall() {
-        RaycastHit2D raycastHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0, new Vector2(transform.localScale.x, 0), 0.3f, groundLayer);
+        RaycastHit2D raycastHit = Physics2D.BoxCast(capsuleCollider.bounds.center, capsuleCollider.bounds.size, 0, new Vector2(transform.localScale.x, 0), 0.3f, groundLayer);
         return raycastHit.collider != null;
     }
 
