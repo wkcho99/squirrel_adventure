@@ -9,7 +9,7 @@ public class RockAttack : MonoBehaviour
 
     private PlayerMove playerMove;
     private float cooldownTimer = Mathf.Infinity;
-
+    public bool isAttack2 = false;
     private void Awake()
     {
         playerMove = GetComponent<PlayerMove>();
@@ -18,14 +18,17 @@ public class RockAttack : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButton(0) && cooldownTimer > attackCooldown && playerMove.canAttack() && playerMove.skill == 2)
+        if (Input.GetKeyDown(KeyCode.F) && cooldownTimer > attackCooldown && playerMove.canAttack() && playerMove.skill == 2 && playerMove.num_skill > 0)
+        {
+            isAttack2 = true;
             Attack();
-
+        }
         cooldownTimer += Time.deltaTime;
     }
 
     private void Attack()
     {
+        playerMove.num_skill--;
         anim.SetTrigger("rock");
         cooldownTimer = 0;
 

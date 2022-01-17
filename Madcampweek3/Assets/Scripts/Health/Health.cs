@@ -3,11 +3,11 @@ using UnityEngine;
 public class Health : MonoBehaviour
 {
     [SerializeField] public float startingHealth;
-    public float currentHealth { get; private set; }
+    public float currentHealth;
     public bool hurt;
-    private bool dead;
-    private Animator anim;
 
+    private Animator anim;
+    
     private void Awake() {
         currentHealth = startingHealth;
         anim = GetComponent<Animator>();
@@ -20,20 +20,7 @@ public class Health : MonoBehaviour
             anim.SetTrigger("hurt");
             hurt = true;
         }
-        else {
-            if(!dead) {
 
-                //Player
-                if(GetComponent<PlayerMove>() != null)
-                    GetComponent<PlayerMove>().enabled = false;
-                
-                //Enemy
-                if(GetComponent<EnemyMove>() != null)
-                    GetComponent<EnemyMove>().enabled = false;
-                
-                dead = true;
-            }
-        }
     }
 
     public void AddHealth(float _value) {

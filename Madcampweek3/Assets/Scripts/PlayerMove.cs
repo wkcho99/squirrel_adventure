@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerMove : MonoBehaviour
 {
@@ -18,9 +19,12 @@ public class PlayerMove : MonoBehaviour
     private int cnt_hurt_frame;
     private bool isGliding;
     public int skill;
-    [SerializeField] private GameObject fire_skilled;
-    [SerializeField] private GameObject thunder_skilled;
-    [SerializeField] private GameObject rock_skilled;
+    [SerializeField] private Image fire_skilled;
+    [SerializeField] private Image thunder_skilled;
+    [SerializeField] private Image rock_skilled;
+    public float glideCooldown;
+    public int num_skill;
+    public bool isTutorial1 =  false;
     void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
@@ -34,10 +38,11 @@ public class PlayerMove : MonoBehaviour
         System.Random rand = new System.Random();
         gameManager.skill = rand.Next(3);
         skill = gameManager.skill;
-        skill = 2;
-        if(skill == 0) fire_skilled.SetActive(true);
-        else if(skill == 1) thunder_skilled.SetActive(true);
-        else if(skill == 2) rock_skilled.SetActive(true);
+        if(skill == 0) fire_skilled.gameObject.SetActive(true);
+        else if(skill == 1) thunder_skilled.gameObject.SetActive(true);
+        else if(skill == 2) rock_skilled.gameObject.SetActive(true);
+        glideCooldown = 0;
+        num_skill = 3;
     }
 
     private void Update() {
@@ -74,7 +79,8 @@ public class PlayerMove : MonoBehaviour
         }
         else if(!health.hurt) cnt_hurt_frame = 0;
 
-        if(!isGrounded() && Input.GetKey(KeyCode.F)) {
+        if(!isGrounded() && Input.GetKey(KeyCode.G) && glideCooldown <= 1.0f) {
+            glideCooldown += Time.deltaTime;
             anim.SetBool("isGliding", true);
             if(!isGliding) VelocityZero();
             isGliding = true;
@@ -86,11 +92,11 @@ public class PlayerMove : MonoBehaviour
             rigid.gravityScale = 4;
         }
 
-        if(wallJumpCooldown > 0.7f) {
+        if(wallJumpCooldown > 1.0f) {
             //Move by Control
             float h = Input.GetAxisRaw("Horizontal");
             if(h != 0)
-                rigid.velocity = new Vector2(maxSpeed*h, rigid.velocity.y);
+                rigid.velocity = new Vector2(maxSpeed*h*2.0f, rigid.velocity.y);
             anim.SetBool("isWalljumping", false);
         }
 
@@ -104,6 +110,7 @@ public class PlayerMove : MonoBehaviour
         if(rigid.velocity.y<0){
             Debug.DrawRay(rigid.position, Vector3.down, new Color(0,1,0));
             if(isGrounded()){
+                glideCooldown = 0;
                 anim.SetBool("isJumping", false);
             }
         }
@@ -195,6 +202,15 @@ public class PlayerMove : MonoBehaviour
                 collision.GetComponent<SpriteRenderer>().color = new Color(1,1,1,1);
             }
         }
+        if(collision.gameObject.tag == "Tutorial1"){
+            collision.gameObject.SetActive(false);
+            isTutorial1 = true;
+        }
+
+        if(collision.gameObject.tag == "Tutorial2"){
+            collision.gameObject.SetActive(false);
+            isTutorial1 = true;
+        }
     }
 
     void OnDamaged(Vector2 targetPos){
@@ -232,7 +248,7 @@ public class PlayerMove : MonoBehaviour
     }
 
     private bool isGrounded() {
-        RaycastHit2D raycastHit = Physics2D.BoxCast(capsuleCollider.bounds.center, capsuleCollider.bounds.size, 0, Vector2.down, 0.1f, groundLayer);
+        RaycastHit2D raycastHit = Physics2D.BoxCast(capsuleCollider.bounds.center, capsuleCollider.bounds.size * 0.9f, 0, Vector2.down, 0.1f, groundLayer);
         return raycastHit.collider != null;
     }
 
@@ -242,6 +258,18 @@ public class PlayerMove : MonoBehaviour
     }
 
     public bool canAttack() {
-        return horizontalInput == 0 && isGrounded() && !onWall();
+        return horizontalInput == 0 && isGrounded();
+    }
+
+    public void OnDie(){
+        //Sprite Alpha
+        spriteRenderer.color = new Color(1,1,1,0.4f);
+        //Sprite Flip Y
+        spriteRenderer.flipY = true;
+        //Collider Disable
+        capsuleCollider.enabled = false;
+        //Die Effect Jump
+        //rigid.AddForce(Vector2.up * 5, ForceMode2D.Impulse);
+
     }
 }

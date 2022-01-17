@@ -9,6 +9,8 @@ TagManager:
   - Spike
   - Item
   - Fake
+  - Tutorial1
+  - Tutorial2
   layers:
   - Default
   - TransparentFX

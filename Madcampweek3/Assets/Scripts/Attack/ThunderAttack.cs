@@ -9,7 +9,7 @@ public class ThunderAttack : MonoBehaviour
 
     private PlayerMove playerMove;
     private float cooldownTimer = Mathf.Infinity;
-
+    public bool isAttack1 = false;
     private void Awake()
     {
         playerMove = GetComponent<PlayerMove>();
@@ -18,14 +18,17 @@ public class ThunderAttack : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButton(0) && cooldownTimer > attackCooldown && playerMove.canAttack() && playerMove.skill == 1)
+        if (Input.GetKeyDown(KeyCode.F) && cooldownTimer > attackCooldown && playerMove.canAttack() && playerMove.skill == 1 && playerMove.num_skill > 0)
+        {
+            isAttack1 = true;
             Attack();
-
+        }
         cooldownTimer += Time.deltaTime;
     }
 
     private void Attack()
     {
+        playerMove.num_skill--;
         anim.SetTrigger("thunder");
         cooldownTimer = 0;
 
