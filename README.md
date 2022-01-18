@@ -6,9 +6,9 @@
 유니티 2d 게임 엔진을 이용하여 다람이가 한해를 모험하는 마리오 형식의 게임을 제작하였다
 ```
 ### 참여자
-- 김덕현 | 
-- 정우진 |
-- 조원경 |
+- 김덕현 | https://github.com/Kim_Deokhyeon1
+- 정우진 | https://github.com/woojin7879
+- 조원경 | https://github.com/wkcho99
 ### 사용 언어
 - C#
 ### 게임 세부 설명
