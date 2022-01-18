@@ -11,6 +11,7 @@ TagManager:
   - Fake
   - Tutorial1
   - Tutorial2
+  - Boss
   layers:
   - Default
   - TransparentFX
@@ -47,4 +48,10 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: back
+    uniqueID: 3771708727
+    locked: 0
+  - name: object
+    uniqueID: 3356080773
     locked: 0

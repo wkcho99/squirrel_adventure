@@ -48,6 +48,7 @@
      <Compile Include="Assets\Scripts\Attack\ThunderAttack.cs" />
      <Compile Include="Assets\Simple 2D Platformer BE2\ReadMe\Scripts\ReadmeBE2.cs" />
      <Compile Include="Assets\Scripts\Attack\Fireball.cs" />
+     <Compile Include="Assets\TextScript2.cs" />
      <Compile Include="Assets\Scripts\SoundManager.cs" />
      <Compile Include="Assets\Scripts\Glidebar.cs" />
      <Compile Include="Assets\TutorialScript.cs" />
@@ -55,16 +56,18 @@
      <Compile Include="Assets\TextScript.cs" />
      <Compile Include="Assets\PlayerMoveScene1.cs" />
      <Compile Include="Assets\Scripts\Attack\Thunder.cs" />
+     <Compile Include="Assets\Scripts\Saw.cs" />
      <Compile Include="Assets\Scripts\PlayerMove.cs" />
+     <Compile Include="Assets\TextScript3.cs" />
+     <Compile Include="Assets\Scripts\BossMove.cs" />
      <Compile Include="Assets\Scripts\Attack\RockAttack.cs" />
      <Compile Include="Assets\TutorialScript3.cs" />
+     <Compile Include="Assets\EndingScript.cs" />
      <Compile Include="Assets\Scripts\Attack\FireballAttack.cs" />
      <Compile Include="Assets\Scripts\GameManager.cs" />
-     <Compile Include="Assets\Scripts\Manabar.cs" />
-     <Compile Include="Assets\TextScript2.cs" />
-     <Compile Include="Assets\TextScript3.cs" />
      <Compile Include="Assets\TextScript4.cs" />
-     <Compile Include="Assets\EndingScript.cs" />
+     <Compile Include="Assets\Scripts\Manabar.cs" />
+     <Compile Include="Assets\Scripts\killBoss.cs" />
     <Reference Include="UnityEngine">
         <HintPath>D:\UNITY\Editor\2020.3.25f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
     </Reference>

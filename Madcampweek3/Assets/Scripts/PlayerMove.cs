@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+using UnityEngine.SceneManagement;
 public class PlayerMove : MonoBehaviour
 {
     public GameManager gameManager;
@@ -58,8 +58,8 @@ public class PlayerMove : MonoBehaviour
 
         //Stop speed when no input
          if(Input.GetButtonUp("Horizontal")){
-            //rigid.velocity = new Vector2(rigid.velocity.normalized.x * 0.5f, rigid.velocity.y);
-            rigid.velocity = new Vector2(0, rigid.velocity.y);
+            if(int.Parse(SceneManager.GetActiveScene().name) >=10) rigid.velocity = new Vector2(rigid.velocity.normalized.x * 0.5f, rigid.velocity.y);
+            else rigid.velocity = new Vector2(0, rigid.velocity.y);
          }
 
         //Direction change
@@ -98,8 +98,10 @@ public class PlayerMove : MonoBehaviour
         if(wallJumpCooldown > 1.0f) {
             //Move by Control
             float h = Input.GetAxisRaw("Horizontal");
-            if(h != 0)
-                rigid.AddForce(new Vector2(h, 0), ForceMode2D.Impulse);
+            if(h != 0){
+                if(int.Parse(SceneManager.GetActiveScene().name) >=10 && isGrounded()) rigid.AddForce(new Vector2(h/50, 0), ForceMode2D.Impulse);
+                else rigid.AddForce(new Vector2(h, 0), ForceMode2D.Impulse);
+            }
             anim.SetBool("isWalljumping", false);
         }
 
@@ -178,7 +180,15 @@ public class PlayerMove : MonoBehaviour
             health.TakeDamage(1);
             OnDamaged(collision.transform.position);
         }
-
+        if(collision.gameObject.tag == "Boss"){
+            //Attack
+            if(rigid.velocity.y < 0 && transform.position.y > collision.transform.position.y){
+                OnBossAttack(collision.transform);
+            }else{
+                health.TakeDamage(1);
+                OnDamaged(collision.transform.position);
+            }
+        }
     }
 
     void OnTriggerEnter2D(Collider2D collision) {
@@ -249,6 +259,21 @@ public class PlayerMove : MonoBehaviour
         EnemyMove enemyMove = enemy.GetComponent<EnemyMove>();
         enemyMove.health.TakeDamage(100);
         enemyMove.OnDamaged();
+    }
+
+    void OnBossAttack(Transform boss){
+        //Point
+        gameManager.stagePoint += 100;
+        //Reaction Force
+        rigid.AddForce(Vector2.up * 10, ForceMode2D.Impulse);
+
+        //Enemy die
+        BossMove bossMove = boss.GetComponent<BossMove>();
+        bossMove.GetComponent<Health>().TakeDamage(1);
+        if(bossMove.GetComponent<Health>().currentHealth <= 0) {
+            bossMove.OnDie();
+            GetComponent<killBoss>().bossKill = true;
+        }
     }
 
     public void VelocityZero(){
