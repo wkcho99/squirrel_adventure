@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour
         stage = int.Parse(SceneManager.GetActiveScene().name);
         color = StageNum.color;
         trycount = PlayerPrefs.GetInt("trycount",0);
-        StageNum.text = "Stage "+ ((stage-1)/3+1) + "-"+ ((stage-1)%3+1) +"\n"+"count: "+ trycount;
+        StageNum.text = "Stage "+ ((stage-1)/3+1) + "-"+ ((stage-1)%3+1) +"\n"+"count: "+ (trycount);
         Invoke("SetInvisible",1.0f);
     }
     
@@ -46,22 +46,16 @@ public class GameManager : MonoBehaviour
     public void NextStage()
     {
     
-        NextPlayerReposition();
 
         //Game Clear
         //Player Control Lock
         if(stage%3 == 0){
-            PlayerPrefs.SetInt("stage", stage/3+2);
-            Time.timeScale = 0;
+            PlayerPrefs.SetInt("stage", stage/3+1);
             //Result UI
             Debug.Log("클리어");
             //Restart Button UI
         }
-
-
-        //Calculate Point
-        totalPoint += stagePoint;
-        stagePoint = 0;
+        NextPlayerReposition();
     }
 
     void OnTriggerEnter2D(Collider2D collision) {
@@ -93,7 +87,11 @@ public class GameManager : MonoBehaviour
 
     public void NextPlayerReposition(){
         PlayerPrefs.SetInt("trycount",trycount);
-        SceneManager.LoadScene((stage+1).ToString());
+        if(stage%3 == 0) {
+            if(stage == 12) SceneManager.LoadScene("ending");
+            SceneManager.LoadScene("scene1");
+        }
+        else SceneManager.LoadScene((stage+1).ToString());
         // player.transform.position = new Vector3(0, 0, 0);
         // player.transform.localScale = Vector3.one;
         // playerHealth.currentHealth = 3;

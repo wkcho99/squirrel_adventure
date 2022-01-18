@@ -25,6 +25,9 @@ public class PlayerMove : MonoBehaviour
     public float glideCooldown;
     public int num_skill;
     public bool isTutorial1 =  false;
+
+    [SerializeField] AudioClip jumpSound;
+    [SerializeField] AudioClip walljumpSound;
     void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
@@ -96,15 +99,19 @@ public class PlayerMove : MonoBehaviour
             //Move by Control
             float h = Input.GetAxisRaw("Horizontal");
             if(h != 0)
-                rigid.velocity = new Vector2(maxSpeed*h*2.0f, rigid.velocity.y);
+                rigid.AddForce(new Vector2(h, 0), ForceMode2D.Impulse);
             anim.SetBool("isWalljumping", false);
         }
 
         //Maxspeed control
-        if (rigid.velocity.x > maxSpeed)
+        if (rigid.velocity.x > maxSpeed && isGrounded())
             rigid.velocity = new Vector2(maxSpeed, rigid.velocity.y);
-        else if (rigid.velocity.x < maxSpeed * (-1))
+        else if (rigid.velocity.x < maxSpeed * (-1) && isGrounded())
             rigid.velocity = new Vector2(maxSpeed * (-1), rigid.velocity.y);
+        if (rigid.velocity.x > 5)
+            rigid.velocity = new Vector2(5, rigid.velocity.y);
+        else if (rigid.velocity.x < 5 * (-1))
+            rigid.velocity = new Vector2(5 * (-1), rigid.velocity.y);
 
         //Landing Platform
         if(rigid.velocity.y<0){
@@ -119,13 +126,14 @@ public class PlayerMove : MonoBehaviour
     private void Jump() {
         if(isGrounded()) {
             rigid.AddForce(Vector2.up * jumPower, ForceMode2D.Impulse);
+            SoundManager.instance.PlaySound(jumpSound);
             anim.SetBool("isJumping", true);
         }
         else if(onWall() && !isGrounded()) {
+            SoundManager.instance.PlaySound(walljumpSound);
             anim.SetBool("isWalljumping", true);
             wallJumpCooldown = 0;
-            VelocityZero();
-            rigid.velocity = new Vector2(-Mathf.Sign(transform.localScale.x)*20, 20);
+            rigid.velocity = new Vector2(-Mathf.Sign(transform.localScale.x)*5, 20);
             transform.localScale = new Vector3(-Mathf.Sign(transform.localScale.x), transform.localScale.y, transform.localScale.z);
             anim.SetBool("isJumping", true);
         }

@@ -10,6 +10,7 @@ public class ThunderAttack : MonoBehaviour
     private PlayerMove playerMove;
     private float cooldownTimer = Mathf.Infinity;
     public bool isAttack1 = false;
+    [SerializeField] AudioClip thunderSound;
     private void Awake()
     {
         playerMove = GetComponent<PlayerMove>();
@@ -28,6 +29,7 @@ public class ThunderAttack : MonoBehaviour
 
     private void Attack()
     {
+        SoundManager.instance.PlaySound(thunderSound);
         playerMove.num_skill--;
         anim.SetTrigger("thunder");
         cooldownTimer = 0;

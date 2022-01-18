@@ -20,14 +20,16 @@ public class PlayerMoveScene1 : MonoBehaviour
     void Update()
     {
         GameObject tempObj = null;
-        PlayerPrefs.SetInt("stage",1);
+        //PlayerPrefs.SetInt("stage",1);
         int stage = PlayerPrefs.GetInt("stage",1);
         if(Input.GetKeyDown(KeyCode.Space)==true){
-            string temp = (stage-1)*3+1+"";
+            string temp = (stagenum-1)*3+1+"";
             Debug.Log(temp);
             if(stagenum <= stage) {
-                if(stage == 1) SceneManager.LoadScene("scene2");
-                else SceneManager.LoadScene(temp);
+                if(stagenum == 1) SceneManager.LoadScene("scene2");
+                else if(stagenum == 2) SceneManager.LoadScene("scene3");
+                else if(stagenum == 3) SceneManager.LoadScene("scene4");
+                else if(stagenum == 4) SceneManager.LoadScene("scene5");
             }
             else Debug.Log("이전 스테이지를 먼저 클리어하세요.");
         }

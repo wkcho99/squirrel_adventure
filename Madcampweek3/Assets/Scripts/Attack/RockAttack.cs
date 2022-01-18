@@ -10,6 +10,7 @@ public class RockAttack : MonoBehaviour
     private PlayerMove playerMove;
     private float cooldownTimer = Mathf.Infinity;
     public bool isAttack2 = false;
+    [SerializeField] AudioClip rockSound;
     private void Awake()
     {
         playerMove = GetComponent<PlayerMove>();
@@ -28,6 +29,7 @@ public class RockAttack : MonoBehaviour
 
     private void Attack()
     {
+        SoundManager.instance.PlaySound(rockSound);
         playerMove.num_skill--;
         anim.SetTrigger("rock");
         cooldownTimer = 0;

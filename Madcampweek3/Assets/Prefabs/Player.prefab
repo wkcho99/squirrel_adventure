@@ -189,6 +189,10 @@ MonoBehaviour:
   thunder_skilled: {fileID: 0}
   rock_skilled: {fileID: 0}
   glideCooldown: 0
+  num_skill: 0
+  isTutorial1: 0
+  jumpSound: {fileID: 8300000, guid: 5b9c4b6eda26c0b40a7ed3efb70a54da, type: 3}
+  walljumpSound: {fileID: 8300000, guid: c9d170e0fefebe04e9d0a1bfca38a671, type: 3}
 --- !u!114 &8427869140480259521
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -222,13 +226,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  isAttack0: 0
 --- !u!61 &8427869140480259524
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -289,13 +287,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  isAttack1: 0
 --- !u!114 &8427869140480259534
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -314,13 +306,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  isAttack2: 0
 --- !u!1 &8427869140512463547
 GameObject:
   m_ObjectHideFlags: 0

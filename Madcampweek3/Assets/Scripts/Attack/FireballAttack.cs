@@ -9,6 +9,7 @@ public class FireballAttack : MonoBehaviour
     private PlayerMove playerMove;
     private float cooldownTimer = Mathf.Infinity;
     public bool isAttack0 = false;
+    [SerializeField] AudioClip fireballSound;
     private void Awake()
     {
         playerMove = GetComponent<PlayerMove>();
@@ -27,6 +28,7 @@ public class FireballAttack : MonoBehaviour
 
     private void Attack()
     {
+        SoundManager.instance.PlaySound(fireballSound);
         playerMove.num_skill--;
         cooldownTimer = 0;
 
