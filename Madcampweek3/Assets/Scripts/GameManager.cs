@@ -31,8 +31,9 @@ public class GameManager : MonoBehaviour
     private void Awake() {
         stage = int.Parse(SceneManager.GetActiveScene().name);
         color = StageNum.color;
-        trycount++;
         trycount = PlayerPrefs.GetInt("trycount",0);
+        trycount++;
+        PlayerPrefs.SetInt("trycount",trycount);
         StageNum.text = "Stage "+ ((stage-1)/3+1) + "-"+ ((stage-1)%3+1) +"\n"+"count: "+ (trycount);
         Invoke("SetInvisible",1.0f);
     }
@@ -40,7 +41,7 @@ public class GameManager : MonoBehaviour
     private void Update() {
         if(playerHealth.currentHealth == 0){
             player.OnDie();
-            Invoke("PlayerReposition",1.0f);
+            Invoke("PlayerReposition",1);
         }
     }
     
@@ -67,6 +68,7 @@ public class GameManager : MonoBehaviour
     }
 
     public void PlayerReposition(){
+        CancelInvoke();
         PlayerPrefs.SetInt("trycount",trycount);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         // player.transform.position = new Vector3(0, 0, 0);
@@ -86,7 +88,7 @@ public class GameManager : MonoBehaviour
     }
 
     public void NextPlayerReposition(){
-        PlayerPrefs.SetInt("trycount",trycount);
+        PlayerPrefs.SetInt("trycount",trycount-1);
         if(stage%3 == 0) {
             if(stage == 12) SceneManager.LoadScene("ending");
             else SceneManager.LoadScene("scene1");
