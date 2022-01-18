@@ -141,31 +141,6 @@ public class PlayerMove : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    /*void FixedUpdate()
-    {
-        if(wallJumpCooldown > 0.7f) {
-            //Move by Control
-            float h = Input.GetAxisRaw("Horizontal");
-            rigid.AddForce(Vector2.right * h * 4, ForceMode2D.Impulse);
-            anim.SetBool("isWalljumping", false);
-        }
-
-        //Maxspeed control
-        if (rigid.velocity.x > maxSpeed)
-            rigid.velocity = new Vector2(maxSpeed, rigid.velocity.y);
-        else if (rigid.velocity.x < maxSpeed * (-1))
-            rigid.velocity = new Vector2(maxSpeed * (-1), rigid.velocity.y);
-
-        //Landing Platform
-        if(rigid.velocity.y<0){
-            Debug.DrawRay(rigid.position, Vector3.down, new Color(0,1,0));
-            if(isGrounded()){
-                anim.SetBool("isJumping", false);
-            }
-        }
-
-    }*/
     void OnCollisionEnter2D(Collision2D collision) {
         if(collision.gameObject.tag == "Enemy"){
             //Attack
@@ -183,7 +158,7 @@ public class PlayerMove : MonoBehaviour
         if(collision.gameObject.tag == "Boss"){
             //Attack
             if(rigid.velocity.y < 0 && transform.position.y > collision.transform.position.y){
-                OnBossAttack(collision.transform);
+                OnAttackBoss(collision.transform);
             }else{
                 health.TakeDamage(1);
                 OnDamaged(collision.transform.position);
@@ -257,11 +232,12 @@ public class PlayerMove : MonoBehaviour
 
         //Enemy die
         EnemyMove enemyMove = enemy.GetComponent<EnemyMove>();
-        enemyMove.health.TakeDamage(100);
-        enemyMove.OnDamaged();
+        enemyMove.health.TakeDamage(1);
+        if(enemyMove.health.currentHealth <= 0)
+            enemyMove.OnDamaged();
     }
 
-    void OnBossAttack(Transform boss){
+    void OnAttackBoss(Transform boss){
         //Point
         gameManager.stagePoint += 100;
         //Reaction Force
@@ -269,11 +245,9 @@ public class PlayerMove : MonoBehaviour
 
         //Enemy die
         BossMove bossMove = boss.GetComponent<BossMove>();
-        bossMove.GetComponent<Health>().TakeDamage(1);
-        if(bossMove.GetComponent<Health>().currentHealth <= 0) {
-            bossMove.OnDie();
-            GetComponent<killBoss>().bossKill = true;
-        }
+        bossMove.health.TakeDamage(1);
+        if(bossMove.health.currentHealth <= 0)
+            bossMove.OnDamaged();
     }
 
     public void VelocityZero(){

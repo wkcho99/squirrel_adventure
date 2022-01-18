@@ -18,46 +18,10 @@ public class EnemyMove : MonoBehaviour
         anim = GetComponent<Animator>();
         capsuleCollider = GetComponent<CapsuleCollider2D>();
         health = GetComponent<Health>();
-        //Invoke("Think", 2);
     }
 
-    // Update is called once per frame
-    /*void FixedUpdate() {
-        //Move
-        rigid.velocity =  new Vector2(nextMove, rigid.velocity.y);
-
-        //Platform Check
-        Vector2 frontVec = new Vector2(rigid.position.x + nextMove * 0.5f, rigid.position.y);
-        Debug.DrawRay(frontVec, Vector3.down, new Color(0,1,0));
-        RaycastHit2D rayHit = Physics2D.Raycast(frontVec, Vector3.down, 1, LayerMask.GetMask("Platform"));
-        if(rayHit.collider == null){
-            if(rayHit.distance < 0.5f){
-                nextMove *= -1;
-                CancelInvoke();
-                Invoke("Think", 2);
-            }
-        }
-    }*/
-
-    /*void Think(){
-        //랜덤에서 최댓값은 랜덤에 포함이 안됨
-        nextMove = Random.Range(-1, 2);
-
-        float nextThinkTime;
-        if(nextMove !=0)
-            nextThinkTime = Random.Range(2f,5f);
-        else
-            nextThinkTime = Random.Range(0.5f,1f);
-
-        Invoke("Think", nextThinkTime);
-        if(nextMove !=0)
-            spriteRenderer.flipX = (nextMove == 1);
-
-        anim.SetInteger("WalkSpeed", nextMove);
-    }*/
-
     public void OnDamaged(){
-        if(health.currentHealth == 0) {
+        if(health.currentHealth <= 0) {
             //Sprite Alpha
             spriteRenderer.color = new Color(1,1,1,0.4f);
             //Sprite Flip Y

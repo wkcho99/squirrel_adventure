@@ -30,7 +30,7 @@ public class Fireball : MonoBehaviour
         boxCollider.enabled = false;
         anim.SetTrigger("explode");
 
-        if(collision.tag == "Enemy") {
+        if(collision.tag == "Enemy" || collision.tag == "Boss") {
             collision.GetComponent<Health>().TakeDamage(1);
             if(collision.GetComponent<Health>().currentHealth == 0) {
                 //Sprite Alpha

@@ -22,7 +22,7 @@ public class Rock : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.tag == "Enemy" && canDamage) {
+        if((collision.tag == "Enemy" || collision.tag == "Boss") && canDamage) {
             collision.GetComponent<Health>().TakeDamage(1);
             if(collision.GetComponent<Health>().currentHealth == 0) {
                 //Sprite Alpha

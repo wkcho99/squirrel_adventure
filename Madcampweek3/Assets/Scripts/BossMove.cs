@@ -9,14 +9,14 @@ public class BossMove : MonoBehaviour
     SpriteRenderer spriteRenderer;
     public Health health;
 
-    BoxCollider2D boxCollider2D;
+    CapsuleCollider2D capsuleCollider;
     // Start is called before the first frame update
     void Awake() {
         rigid = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        boxCollider2D = GetComponent<BoxCollider2D>();
+        capsuleCollider = GetComponent<CapsuleCollider2D>();
         health = GetComponent<Health>();
-        Invoke("Think", 2);
+        Invoke("Think", 0);
     }
 
     // Update is called once per frame
@@ -27,12 +27,12 @@ public class BossMove : MonoBehaviour
         //Platform Check
         Vector2 frontVec = new Vector2(rigid.position.x + nextMove * 0.5f, rigid.position.y);
         Debug.DrawRay(frontVec, Vector3.down, new Color(0,1,0));
-        RaycastHit2D rayHit = Physics2D.Raycast(frontVec, Vector3.down, 1, LayerMask.GetMask("Platform"));
-        if(rayHit.collider == null){
+        RaycastHit2D rayHit = Physics2D.Raycast(frontVec, new Vector2(Mathf.Sign(rigid.velocity.x), 0), 3, LayerMask.GetMask("Platform"));
+        if(rayHit.collider != null){
             if(rayHit.distance < 0.5f){
                 nextMove *= -1;
                 CancelInvoke();
-                Invoke("Think", 2);
+                Invoke("Think", 0);
             }
         }
     }
@@ -52,14 +52,14 @@ public class BossMove : MonoBehaviour
             spriteRenderer.flipX = (nextMove == 1);
     }
 
-    public void OnDie(){
-        if(health.currentHealth == 0) {
+    public void OnDamaged(){
+        if(health.currentHealth <= 0) {
             //Sprite Alpha
             spriteRenderer.color = new Color(1,1,1,0.4f);
             //Sprite Flip Y
             spriteRenderer.flipY = true;
             //Collider Disable
-            boxCollider2D.enabled = false;
+            capsuleCollider.enabled = false;
             //Die Effect Jump
             rigid.AddForce(Vector2.up * 5, ForceMode2D.Impulse);
             return;
