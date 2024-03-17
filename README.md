@@ -46,5 +46,4 @@
 겨울 3스테이지에는 최종보스로 곰이 등장한다.
 ```
 ### 시연영상
-[https://drive.google.com/file/d/17GiI8qWYwT3YEhsL81V-LYpvoLmiL1Fa/view?usp=sharing
-](https://bit.ly/squirrel_adventure)https://bit.ly/squirrel_adventure
+[https://bit.ly/squirrel_adventure]
